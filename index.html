@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<head>
+    <title>Crud with HTML & JS</title>
+</head>
+
+<body>
+    <table>
+        <tr>
+            <td>
+                <form autocomplete="off" onsubmit="onFormSubmit()">
+                    <div>
+                        <label for="productCode">Item Name</label>
+                        <input type="text" name="productCode" id="productCode" placeholder="Enter item name">
+                    </div>
+                    <div>
+                        <label for="product">Description</label>
+                        <input type="text" name="product" id="product" placeholder="Enter item description">
+                    </div>
+                    <div>
+                        <label for="qty">Quantity</label>
+                        <input type="number" name="qty" id="qty" placeholder="Enter quantity in stock">
+                    </div>
+                    <div>
+                        <label for="perPrice">Price</label>
+                        <input type="number" name="perPrice" id="perPrice" placeholder="Enter price per quantity">
+                    </div>
+
+                    <div class="form_action--button">
+                        <input type="submit" value="Add Item">
+                        <input type="reset" value="Reset">
+                    </div>
+                </form>
+
+                <td>
+                    <table class="list" id="storeList">
+                        <thead>
+                            <tr>
+                                <th>Item Name</th>
+                                <th>Description</th>
+                                <th>Qty</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </td>
+            </td>
+        </tr>
+    </table>
+    <script type="text/javascript" src="./script.js"></script>
+</body>
+</html>

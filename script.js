@@ -1,72 +1,179 @@
-var selectedRow = null
+var editFormData;
 
-function onFormSubmit(e) {
-	event.preventDefault();
-        var formData = readFormData();
-        if (selectedRow == null){
-            insertNewRecord(formData);
-		}
-        else{
-            updateRecord(formData);
-		}
-        resetForm();    
-}
-
-//Retrieve the data
-function readFormData() {
-    var formData = {};
-    formData["productCode"] = document.getElementById("productCode").value;
-    formData["product"] = document.getElementById("product").value;
-    formData["qty"] = document.getElementById("qty").value;
-    formData["perPrice"] = document.getElementById("perPrice").value;
-    return formData;
-}
-
-//Insert the data
-function insertNewRecord(data) {
-    var table = document.getElementById("storeList").getElementsByTagName('tbody')[0];
-    var newRow = table.insertRow(table.length);
-    cell1 = newRow.insertCell(0);
-		cell1.innerHTML = data.productCode;
-    cell2 = newRow.insertCell(1);
-		cell2.innerHTML = data.product;
-    cell3 = newRow.insertCell(2);
-		cell3.innerHTML = data.qty;
-    cell4 = newRow.insertCell(3);
-		cell4.innerHTML = data.perPrice;
-    cell4 = newRow.insertCell(4);
-        cell4.innerHTML = `<button onClick="onEdit(this)">Edit</button> <button onClick="onDelete(this)">Delete</button>`;
-}
-
-//Edit the data
-function onEdit(td) {
-    selectedRow = td.parentElement.parentElement;
-    document.getElementById("productCode").value = selectedRow.cells[0].innerHTML;
-    document.getElementById("product").value = selectedRow.cells[1].innerHTML;
-    document.getElementById("qty").value = selectedRow.cells[2].innerHTML;
-    document.getElementById("perPrice").value = selectedRow.cells[3].innerHTML;
-}
-function updateRecord(formData) {
-    selectedRow.cells[0].innerHTML = formData.productCode;
-    selectedRow.cells[1].innerHTML = formData.product;
-    selectedRow.cells[2].innerHTML = formData.qty;
-    selectedRow.cells[3].innerHTML = formData.perPrice;
-}
-
-//Delete the data
-function onDelete(td) {
-    if (confirm('Do you want to delete this record?')) {
-        row = td.parentElement.parentElement;
-        document.getElementById('storeList').deleteRow(row.rowIndex);
-        resetForm();
+function getFormData() {
+    return {
+            name:document.getElementById("name").value,
+			descr:document.getElementById("descr").value,
+			price:document.getElementById("price").value,
+            qty:document.getElementById("qty").value
     }
 }
 
-//Reset the data
-function resetForm() {
-    document.getElementById("productCode").value = '';
-    document.getElementById("product").value = '';
-    document.getElementById("qty").value = '';
-    document.getElementById("perPrice").value = '';
-    selectedRow = null;
+function getFormData1(nam,des,cost,quant) {
+    return {
+			name:nam,
+			descr:des,
+			price:cost,
+            qty:quant
+    }
 }
+
+function clearFormData() {
+        document.getElementById("name").value = "";
+        document.getElementById("descr").value = "";
+		document.getElementById("price").value = "";
+		document.getElementById("qty").value = "";
+}
+
+// set the message for form status
+function setSuccessMessage(message) {
+    document.getElementById("message").innerHTML = message;
+}
+
+function editDataCall(id) {
+    // call get user details by id
+    fetch("https://crudcrud.com/api/86c96bd4984f43828baf96c86b0246c6/inventory/"+id,{
+        method:"GET"
+    }).then((res)=>res.json()).then((response)=>{
+        console.log("Edit info: ",response);	
+		let payload  = getFormData1(response.name,response.descr,response.price,response.qty-1);
+        fetch("https://crudcrud.com/api/86c96bd4984f43828baf96c86b0246c6/inventory/"+id,{
+            method:"PUT",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify(payload)
+        }).then((res)=>res.json()).then((response)=>{
+            setSuccessMessage(response.message)
+                // clear input email and name
+                clearFormData();
+                getData(); // reload table 
+        })
+        editFormData =  response[0];
+    })
+}
+
+
+
+function editDataCall1(id) {
+    // call get user details by id
+    fetch("https://crudcrud.com/api/86c96bd4984f43828baf96c86b0246c6/inventory/"+id,{
+        method:"GET"
+    }).then((res)=>res.json()).then((response)=>{
+        console.log("Edit info: ",response);	
+		let payload  = getFormData1(response.name,response.descr,response.price,response.qty-2);
+        fetch("https://crudcrud.com/api/86c96bd4984f43828baf96c86b0246c6/inventory/"+id,{
+            method:"PUT",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify(payload)
+        }).then((res)=>res.json()).then((response)=>{
+            setSuccessMessage(response.message)
+                // clear input email and name
+                clearFormData();
+                getData(); // reload table 
+        })
+        editFormData =  response[0];
+    })
+}
+
+
+function editDataCall2(id) {
+    // call get user details by id
+    fetch("https://crudcrud.com/api/86c96bd4984f43828baf96c86b0246c6/inventory/"+id,{
+        method:"GET"
+    }).then((res)=>res.json()).then((response)=>{
+        console.log("Edit info: ",response);	
+		let payload  = getFormData1(response.name,response.descr,response.price,response.qty-3);
+        fetch("https://crudcrud.com/api/86c96bd4984f43828baf96c86b0246c6/inventory/"+id,{
+            method:"PUT",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify(payload)
+        }).then((res)=>res.json()).then((response)=>{
+            setSuccessMessage(response.message)
+                // clear input email and name
+                clearFormData();
+                getData(); // reload table 
+        })
+        editFormData =  response[0];
+    })
+}
+
+// called this function when user click on button
+function submitForm() {
+		if(document.getElementById("name").value!='' && document.getElementById("descr").value!='' && document.getElementById("qty").value!='' && document.getElementById("price").value!='')
+		{
+		var numbers= /^[0-9]+$/;
+		if(document.getElementById("qty").value.match(numbers) && document.getElementById("price").value.match(numbers))
+		{
+		addProduct(); 
+		}
+		else{
+		alert("Please add numeric values in price and quantity fields");
+		}
+		}
+		else
+		{
+		alert("Please enter values in all the fields for adding a new product");
+		}
+}
+
+// add user function 
+function addProduct() {
+        let payload  = getFormData();
+        fetch("https://crudcrud.com/api/86c96bd4984f43828baf96c86b0246c6/inventory",{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify(payload)
+        }).then((res)=>res.json()).then((response)=>{
+                // clear input email and name
+                clearFormData();
+                getData(); // reload table 
+        })
+}
+
+// delete data
+function deleteData(id) {
+    fetch("https://crudcrud.com/api/86c96bd4984f43828baf96c86b0246c6/inventory/"+id,{
+            method:"DELETE",
+            headers:{
+                "Content-Type":"application/json"
+            }
+        }).then((res)=>res.json()).then(
+        (response)=>{
+            setSuccessMessage(response.message);
+            getData();
+        }
+    )
+}
+
+// get data method
+function getData() {
+                fetch("https://crudcrud.com/api/86c96bd4984f43828baf96c86b0246c6/inventory").then(
+                    (res)=>res.json()
+                ).then((response)=>{
+                    var tmpData  = "";
+                    console.log(response);
+                    response.forEach((product)=>{
+                        tmpData+="<tr>"
+                        tmpData+="<td>"+product.name+"</td>";
+                        tmpData+="<td>"+product.descr+"</td>";
+                        tmpData+="<td>"+product.price+"</td>";
+                        tmpData+="<td>"+product.qty+"</td>";
+                        tmpData+="<td><button class='btn btn-primary' onclick='editDataCall(`"+product._id+"`)'>Buy 1</button></td>";
+						tmpData+="<td><button class='btn btn-primary' onclick='editDataCall1(`"+product._id+"`)'>Buy 2</button></td>";
+						tmpData+="<td><button class='btn btn-primary' onclick='editDataCall2(`"+product._id+"`)'>Buy 3</button></td>";
+                        tmpData+="<td><button class='btn btn-danger' onclick='deleteData(`"+product._id+"`)'>Delete</button></td>";
+                        tmpData+="</tr>";
+                    })
+                    document.getElementById("tbData").innerHTML = tmpData;
+                })     
+        }
+		
+
+getData();

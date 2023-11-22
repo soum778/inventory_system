@@ -1,4 +1,4 @@
-var editFormData;
+var editFormData; 
 
 function getFormData() {
     return {
@@ -25,81 +25,70 @@ function clearFormData() {
 		document.getElementById("qty").value = "";
 }
 
-// set the message for form status
-function setSuccessMessage(message) {
-    document.getElementById("message").innerHTML = message;
-}
 
-function editDataCall(id) {
+async  function editDataCall(id) {
     // call get user details by id
-    fetch("https://crudcrud.com/api/86c96bd4984f43828baf96c86b0246c6/inventory/"+id,{
-        method:"GET"
-    }).then((res)=>res.json()).then((response)=>{
-        console.log("Edit info: ",response);	
-		let payload  = getFormData1(response.name,response.descr,response.price,response.qty-1);
-        fetch("https://crudcrud.com/api/86c96bd4984f43828baf96c86b0246c6/inventory/"+id,{
-            method:"PUT",
-            headers:{
-                "Content-Type":"application/json"
-            },
-            body:JSON.stringify(payload)
-        }).then((res)=>res.json()).then((response)=>{
-            setSuccessMessage(response.message)
-                // clear input email and name
-                clearFormData();
+	try{
+		const response= await axios.get("https://crudcrud.com/api/8d6e2856f0df47e199eb4ef2a391900d/inventory/"+id)
+        console.log("Edit info: ",response.data.qty);
+         if(response.data.qty-1>=0){
+		let payload  = getFormData1(response.data.name,response.data.descr,response.data.price,response.data.qty-1);
+       await axios.put("https://crudcrud.com/api/8d6e2856f0df47e199eb4ef2a391900d/inventory/"+id,payload)
                 getData(); // reload table 
-        })
-        editFormData =  response[0];
-    })
+		 }
+		 else{
+			 alert("Item is over");
+		 }
+	}
+	catch(err)
+	{
+		console.log(err);
+    }
 }
 
 
 
-function editDataCall1(id) {
+
+async  function editDataCall1(id) {
     // call get user details by id
-    fetch("https://crudcrud.com/api/86c96bd4984f43828baf96c86b0246c6/inventory/"+id,{
-        method:"GET"
-    }).then((res)=>res.json()).then((response)=>{
-        console.log("Edit info: ",response);	
-		let payload  = getFormData1(response.name,response.descr,response.price,response.qty-2);
-        fetch("https://crudcrud.com/api/86c96bd4984f43828baf96c86b0246c6/inventory/"+id,{
-            method:"PUT",
-            headers:{
-                "Content-Type":"application/json"
-            },
-            body:JSON.stringify(payload)
-        }).then((res)=>res.json()).then((response)=>{
-            setSuccessMessage(response.message)
-                // clear input email and name
-                clearFormData();
+	try{
+		const response= await axios.get("https://crudcrud.com/api/8d6e2856f0df47e199eb4ef2a391900d/inventory/"+id)
+        console.log("Edit info: ",response.data.qty);
+         if(response.data.qty-2>=0){
+		let payload  = getFormData1(response.data.name,response.data.descr,response.data.price,response.data.qty-2);
+       await axios.put("https://crudcrud.com/api/8d6e2856f0df47e199eb4ef2a391900d/inventory/"+id,payload)
                 getData(); // reload table 
-        })
-        editFormData =  response[0];
-    })
+		 }
+		 else{
+			 alert("Item is over");
+		 }
+	}
+	catch(err)
+	{
+		console.log(err);
+    }
 }
 
 
-function editDataCall2(id) {
+
+async  function editDataCall2(id) {
     // call get user details by id
-    fetch("https://crudcrud.com/api/86c96bd4984f43828baf96c86b0246c6/inventory/"+id,{
-        method:"GET"
-    }).then((res)=>res.json()).then((response)=>{
-        console.log("Edit info: ",response);	
-		let payload  = getFormData1(response.name,response.descr,response.price,response.qty-3);
-        fetch("https://crudcrud.com/api/86c96bd4984f43828baf96c86b0246c6/inventory/"+id,{
-            method:"PUT",
-            headers:{
-                "Content-Type":"application/json"
-            },
-            body:JSON.stringify(payload)
-        }).then((res)=>res.json()).then((response)=>{
-            setSuccessMessage(response.message)
-                // clear input email and name
-                clearFormData();
+	try{
+		const response= await axios.get("https://crudcrud.com/api/8d6e2856f0df47e199eb4ef2a391900d/inventory/"+id)
+        console.log("Edit info: ",response.data.qty);
+         if(response.data.qty-3>=0){
+		let payload  = getFormData1(response.data.name,response.data.descr,response.data.price,response.data.qty-3);
+       await axios.put("https://crudcrud.com/api/8d6e2856f0df47e199eb4ef2a391900d/inventory/"+id,payload)
                 getData(); // reload table 
-        })
-        editFormData =  response[0];
-    })
+		 }
+		 else{
+			 alert("Item is over");
+		 }
+	}
+	catch(err)
+	{
+		console.log(err);
+    }
 }
 
 // called this function when user click on button
@@ -122,44 +111,36 @@ function submitForm() {
 }
 
 // add user function 
-function addProduct() {
-        let payload  = getFormData();
-        fetch("https://crudcrud.com/api/86c96bd4984f43828baf96c86b0246c6/inventory",{
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json"
-            },
-            body:JSON.stringify(payload)
-        }).then((res)=>res.json()).then((response)=>{
-                // clear input email and name
-                clearFormData();
+async function addProduct() {
+try{	
+const payload= getFormData();
+await axios.post("https://crudcrud.com/api/8d6e2856f0df47e199eb4ef2a391900d/inventory",payload)	
+	getData();
+}
+catch(err){
+	console.log(err);
+}
+}
+
+ async function deleteData(id) {
+	try{
+	 await axios.delete("https://crudcrud.com/api/8d6e2856f0df47e199eb4ef2a391900d/inventory/"+id)
+    
                 getData(); // reload table 
-        })
-}
-
-// delete data
-function deleteData(id) {
-    fetch("https://crudcrud.com/api/86c96bd4984f43828baf96c86b0246c6/inventory/"+id,{
-            method:"DELETE",
-            headers:{
-                "Content-Type":"application/json"
-            }
-        }).then((res)=>res.json()).then(
-        (response)=>{
-            setSuccessMessage(response.message);
-            getData();
         }
-    )
+	catch(err) {
+		console.log(err);
+	}
+	
 }
 
-// get data method
-function getData() {
-                fetch("https://crudcrud.com/api/86c96bd4984f43828baf96c86b0246c6/inventory").then(
-                    (res)=>res.json()
-                ).then((response)=>{
-                    var tmpData  = "";
+
+async function getData() {
+	try{
+			const response =await axios.get("https://crudcrud.com/api/8d6e2856f0df47e199eb4ef2a391900d/inventory")		
+	 var tmpData  = "";
                     console.log(response);
-                    response.forEach((product)=>{
+                    response.data.forEach((product)=>{
                         tmpData+="<tr>"
                         tmpData+="<td>"+product.name+"</td>";
                         tmpData+="<td>"+product.descr+"</td>";
@@ -170,10 +151,16 @@ function getData() {
 						tmpData+="<td><button class='btn btn-primary' onclick='editDataCall2(`"+product._id+"`)'>Buy 3</button></td>";
                         tmpData+="<td><button class='btn btn-danger' onclick='deleteData(`"+product._id+"`)'>Delete</button></td>";
                         tmpData+="</tr>";
-                    })
-                    document.getElementById("tbData").innerHTML = tmpData;
-                })     
-        }
+	
+})
+document.getElementById("tbData").innerHTML = tmpData;
+	}
+catch(err)
+{
+console.log(err);	
+}
+}
+		
 		
 
 getData();
